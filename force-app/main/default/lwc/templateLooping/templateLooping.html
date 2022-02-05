@@ -1,0 +1,36 @@
+<template>
+    <lightning-card  title="For Each Loop">
+        
+        <div class="slds-var-m-around_medium">
+            <template for:each={listUsers} for:item="user">
+                <ul key={user.id} class="slds-has-dividers_around-space">
+                   <li class="slds-item"> 
+                       Name: {user.firstName} {user.lastName}
+                    </li>
+                </ul>
+            </template>
+        </div>
+    </lightning-card>
+
+
+    <lightning-card  title="Interator Loop">
+        
+        <div class="slds-var-m-around_medium">
+            <template iterator:user={listUsers} >
+                <ul key={user.value.id} class="slds-has-dividers_around-space">
+                   <div if:true={user.first}>
+                    <strong>List of Employees</strong> 
+                   </div>
+                   <li class="slds-item">
+                       <strong>{user.value.function}: </strong> 
+                       {user.value.firstName} {user.value.lastName}
+                    </li>
+                    <div if:true={user.last}>
+                        Contact numbers: +55 21 3050-1800
+                    </div>
+                </ul>
+            </template>
+        </div>
+    </lightning-card>
+
+</template>

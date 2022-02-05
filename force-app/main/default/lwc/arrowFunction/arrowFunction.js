@@ -1,8 +1,11 @@
 import { LightningElement } from 'lwc';
+import {UtilFormatData}  from 'c/utilLWC';
 
 export default class ArrowFunction extends LightningElement {
     connectedCallback(){
         console.log("Soma :" + this.sum(10,20));
+        //console.log("Datas: " + UtilFormatData.formatBRData("2021-01-01"));
+       // console.log("Data: ");
 
         var array = [1,2,3,4];
         console.log(this.mult2(array));
@@ -29,7 +32,4 @@ export default class ArrowFunction extends LightningElement {
     }
 
     mult2 = arr => arr.map((item)=> item *2);
-
-    
-
 }
