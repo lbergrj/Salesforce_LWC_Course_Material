@@ -3,7 +3,7 @@ import { LightningElement } from 'lwc';
 
 export default class QuerySelector extends LightningElement {
     
-    //usar o método renderedCallback para funcionar
+    //usar o método renderedCallback
     renderedCallback(){
         this.setAllElements();
         this.setfisrtElement();
