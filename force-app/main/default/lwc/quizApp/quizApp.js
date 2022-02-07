@@ -3,6 +3,18 @@ import { LightningElement } from 'lwc';
 export default class QuizApp extends LightningElement {
     selected ={};
     correctAnswers;
+    myQuestion = {
+        id : "Question3",
+        question : "Which one of the following does not came from Atlantis ?",
+        answers : {
+            a : "Superman",
+            b : "Batman",
+            c : "Green Arrow",
+            d : "Aquaman"
+        },
+        correctAnswer : "d"
+    }
+
     myQuestions = [
         {
             id : "Question1",
@@ -40,6 +52,11 @@ export default class QuizApp extends LightningElement {
         
     ]
 
+    connectedCallback(){
+        this.inputHandler(this.myQuestion,'question');
+        this.inputHandler(this.myQuestions,'question');
+    }
+
     changeHandler(event){
         console.log("Name: " + event.target.name);
         console.log("Value: " + event.target.value);
@@ -47,6 +64,21 @@ export default class QuizApp extends LightningElement {
         this.selected = {
             ...this.selected,
             [name]:value
+        }
+    }
+
+    inputHandler(input,parameter){
+        if(Array.isArray(input)){
+            return input;
+        }
+        else{
+            if(typeof input == 'object'){
+                var array = new Array();
+               if(input[parameter] != null && input[parameter] != undefined){
+                   array.push(input);
+               }
+            }
+            return array;
         }
     }
 
