@@ -1,0 +1,5 @@
+@import 'c/shareCssLibrary';
+.html{
+    width: 90% ;
+    background-color: #4caf50;
+}
