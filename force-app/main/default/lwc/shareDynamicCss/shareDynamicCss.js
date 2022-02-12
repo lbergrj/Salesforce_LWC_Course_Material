@@ -4,7 +4,8 @@ export default class ShareDynamicCss extends LightningElement {
     percentValue = 10;
     
     changeHandler(event){
-        this.percentValue=event.target.value;
+        this.percentValue = this.setLimits(event);
+        
     }
 
     get percentage(){
@@ -19,6 +20,19 @@ export default class ShareDynamicCss extends LightningElement {
             color = "green"
         }
         return `width:${this.percentValue}% ; background-color:${color}`;
+    }
+
+    setLimits( event){
+        var value = event.target.value;
+        if(value<0 ) {
+            value = 0;
+        }
+        if(value > 100 ) {
+            value = 100;
+        }
+        event.target.value = value;
+        return value;
+
     }
 
 }
