@@ -1,7 +1,7 @@
 import { LightningElement } from 'lwc';
 
 export default class ShareDynamicCss extends LightningElement {
-    percentValue = 10;
+    percentValue = 0;
     
     changeHandler(event){
         this.percentValue = this.setLimits(event);
@@ -19,7 +19,7 @@ export default class ShareDynamicCss extends LightningElement {
         else{
             color = "green"
         }
-        return `width:${this.percentValue}% ; background-color:${color}`;
+        return `width:${this.percentValue}% ;  background-color:${color}`;
     }
 
     setLimits( event){
