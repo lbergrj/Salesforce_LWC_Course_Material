@@ -1,0 +1,12 @@
+<template>
+    <div style="height: 200px;">
+        <lightning-datatable
+                key-field="id"
+                data={data}
+                onrowselection={handleSelected}
+                selected-rows={preSelectedRows}
+                columns={columns}>
+                
+        </lightning-datatable>
+    </div>    
+</template>
