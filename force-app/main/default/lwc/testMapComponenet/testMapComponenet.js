@@ -14,53 +14,74 @@ export default class TestMapComponenet extends LightningElement {
     data = [];
     mapIdsSelectedOld = new Map ();
     mapIdsSelectedNew = new Map();
-    columns = columns;
+    @track mapGrp = new Map();
+    @track columns = columns;
     @track preSelectedRows=[];
     @track selectedRows = [];
     dataSize = 0;
+    tableLoadingState = true;
 
    
-    connectedCallback() {
-        console.log("LWC Data Table");
+    async connectedCallback() {
+        console.log("LWC Data Table@ ");
         this.data = this.setMockData();
+        this.completeMapGrp(this.data);
         this.dataSize = Object.keys(this.data).length;
-        console.log("Data Size : " + this.dataSize);
-        this.preSelectedRows.push("002");
+        this.tableLoadingState = false;
+
+        this.showMapData(this.mapGrp);
+        
+        
     }
 
     handleSelected(event){
         this.selectedRows = event.detail.selectedRows;
         console.log(" Lista Selecionada: " + JSON.stringify(this.selectedRows));
-        this.mapIdsSelectedNew = this.createMap(this.selectedRows),
-        //this.showMapData();
-        this.getItemChanged();
-        //Parateste
+        this.mapIdsSelectedNew = this.createMap(this.selectedRows);
+        this.itemChangedHandler();
+    }
+
+    handlerClick(event){
+        console.log("Click");
+        this.resetList();
+      
         
     }
 
-    getItemChanged(){
+    resetList(){
+        let array = [];
+        this.preSelectedRows = [...array];
+        this.selectedRows = [...array];
+        console.log(" Lista Selecionada: " + JSON.stringify(this.selectedRows));
+
+    } 
+
+    itemChangedHandler(){
         var sizeMapNew = this.mapIdsSelectedNew.size;
         var sizeMapOld = this.mapIdsSelectedOld.size;
-        var functionSelected = "";
-        var itemChanged;
-
-        if(sizeMapNew> 0 && sizeMapNew < this.dataSize ){
-            if(sizeMapNew > sizeMapOld){
-               itemChanged =  this.compareMaps(this.mapIdsSelectedNew, this.mapIdsSelectedOld);
-                functionSelected = "add";
-            }
-            else if(sizeMapOld > sizeMapNew){
-                itemChanged = this.compareMaps( this.mapIdsSelectedOld, this.mapIdsSelectedNew);
-                functionSelected = "remove";
-
-            }
-            itemChanged["function"] = functionSelected;
-            console.log("Item Changed: " + JSON.stringify(itemChanged));
-        }
         
+        var itemChanged;
+        if(sizeMapNew > sizeMapOld){
+            itemChanged =  this.compareMaps(this.mapIdsSelectedNew, this.mapIdsSelectedOld);
+            itemChanged["isSelected"] = true;
+        }
+        else if(sizeMapOld > sizeMapNew){
+            itemChanged = this.compareMaps( this.mapIdsSelectedOld, this.mapIdsSelectedNew);
+            itemChanged["isSelected"] = false;
+        }
+        console.log("Item Changed: " + JSON.stringify(itemChanged));
+        this.setMapSelection(itemChanged);
+        this.showMapData(this.mapGrp);
+
+        //var list = this.mapSelectedItens();
+        //this.preSelectedRows = [...this.mapSelectedItens() ];
+
+            
         this.mapIdsSelectedOld = new Map([...this.mapIdsSelectedNew]);
+        
     }
 
+   
     compareMaps(map1, map2){
         const keys = Array.from(map1.values());
         var output = {};
@@ -69,7 +90,6 @@ export default class TestMapComponenet extends LightningElement {
                 //console.log("Compare Map " + JSON.stringify(item));
                 output = item;
                 return;
-                
             }
         });
         return output;
@@ -87,12 +107,70 @@ export default class TestMapComponenet extends LightningElement {
         return map;
     }
 
-    showMapData(){
-        Array.from(this.mapIdsSelectedNew.values()).forEach(element =>{
-            console.log("Show Map Data: " + JSON.stringify(element));
+    showMapData(map){
+        console.log("Show Map Data: ");
+        var data = Array.from(map.values());
+        data.forEach(element =>{
+            console.log( JSON.stringify(element));
         });
     }
 
+    mapSelectedItens(){
+        var listItens = new Array();
+        Array.from(this.mapGrp.values()).forEach(item =>{
+            if(item.isSelected == true){
+                item.data.forEach(element => {
+                    listItens.push(element.id);
+                });
+            }
+        });
+        console.log("List ID Selected: " + JSON.stringify(listItens));
+        return listItens;
+    }
+
+    setMapSelection(item){
+        let id;
+        if(item.idGrp == undefined || item.idGrp == null){
+            id = item.id
+        }
+        else{
+            id = item.idGrp;
+        }
+        this.mapGrp.get(id).isSelected = item.isSelected;
+    }
+
+    completeMapGrp(input){
+        if(input != null && input != undefined){
+            input.forEach(element => {
+                var item ={};
+                item["isSelected"] = false;
+                var array = new Array();
+                
+                //Adiciona no Map itens sem Grupo Controle
+                if(element.idGrp == null ||element.idGrp == undefined){
+                    
+                    array.push(element);
+                    item['data'] = array;
+                    this.mapGrp.set(element.id,item);
+                }
+
+                else{
+                    var idGrControle = element.idGrp;
+                    if(this.mapGrp.get(idGrControle) == undefined || this.mapGrp.get(idGrControle) == null){
+                        //console.log("Criar Grupos de Controle: " + idGrControle);
+                        array.push(element);
+                        item['data'] = array;
+                        this.mapGrp.set(idGrControle,item);
+                    }
+                    else{
+                        item = this.mapGrp.get(idGrControle);
+                        item.data.push(element);
+                       //console.log("Item Salvo no Mapa" + JSON.stringify(item));
+                    }
+                }
+            });
+        }
+    }
 
     setMockData(){
         return [
