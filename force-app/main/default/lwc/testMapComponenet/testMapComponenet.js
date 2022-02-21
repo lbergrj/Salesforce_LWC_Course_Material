@@ -22,8 +22,8 @@ export default class TestMapComponenet extends LightningElement {
     tableLoadingState = true;
 
    
-    async connectedCallback() {
-        console.log("LWC Data Table@ ");
+     connectedCallback() {
+        console.log("LWC Data Table ");
         this.data = this.setMockData();
         this.completeMapGrp(this.data);
         this.dataSize = Object.keys(this.data).length;
@@ -36,7 +36,6 @@ export default class TestMapComponenet extends LightningElement {
 
     handleSelected(event){
         this.selectedRows = event.detail.selectedRows;
-        console.log(" Lista Selecionada: " + JSON.stringify(this.selectedRows));
         this.mapIdsSelectedNew = this.createMap(this.selectedRows);
         this.itemChangedHandler();
     }
@@ -59,25 +58,30 @@ export default class TestMapComponenet extends LightningElement {
     itemChangedHandler(){
         var sizeMapNew = this.mapIdsSelectedNew.size;
         var sizeMapOld = this.mapIdsSelectedOld.size;
-        
         var itemChanged;
+        //Inclusão de Linha
         if(sizeMapNew > sizeMapOld){
             itemChanged =  this.compareMaps(this.mapIdsSelectedNew, this.mapIdsSelectedOld);
             itemChanged["isSelected"] = true;
         }
+        //Exclusão de Linha
         else if(sizeMapOld > sizeMapNew){
             itemChanged = this.compareMaps( this.mapIdsSelectedOld, this.mapIdsSelectedNew);
             itemChanged["isSelected"] = false;
         }
+
+        //Alteração  do estatus isSelected no Mapa de Grupo
         console.log("Item Changed: " + JSON.stringify(itemChanged));
         this.setMapSelection(itemChanged);
-        this.showMapData(this.mapGrp);
 
-        //var list = this.mapSelectedItens();
-        //this.preSelectedRows = [...this.mapSelectedItens() ];
+        //Recupera lista de ID e Itens Seleccionados no Mapa de grupo
+       var selectedLists = this.getSelectedListsFromMap();
+       
+       //Marca na tabela todos os itens do mapa de  grupo marcados com isSeleceted = true
+       this.preSelectedRows = [...selectedLists.listIds];
 
-            
-        this.mapIdsSelectedOld = new Map([...this.mapIdsSelectedNew]);
+       //Atualiza o mapa antigo para comparação para próvima seleção
+       this.mapIdsSelectedOld = this.createMap(selectedLists.listItens);
         
     }
 
@@ -87,7 +91,7 @@ export default class TestMapComponenet extends LightningElement {
         var output = {};
         keys.forEach(item => {
             if(map2.get(item.id) == undefined || map2.get(item.id) == null ){
-                //console.log("Compare Map " + JSON.stringify(item));
+                
                 output = item;
                 return;
             }
@@ -96,7 +100,7 @@ export default class TestMapComponenet extends LightningElement {
     }
 
     createMap(arrayInput){
-        var map = new Map();
+        let map = new Map();
         arrayInput.forEach(item => {
             var itemMap = {};
             itemMap['id'] = item.id;
@@ -107,6 +111,8 @@ export default class TestMapComponenet extends LightningElement {
         return map;
     }
 
+    
+
     showMapData(map){
         console.log("Show Map Data: ");
         var data = Array.from(map.values());
@@ -115,18 +121,32 @@ export default class TestMapComponenet extends LightningElement {
         });
     }
 
-    mapSelectedItens(){
+    getSelectedListsFromMap(){
+        var listIds = new Array();
         var listItens = new Array();
         Array.from(this.mapGrp.values()).forEach(item =>{
             if(item.isSelected == true){
                 item.data.forEach(element => {
-                    listItens.push(element.id);
+                    listIds.push(element.id);
+                    
+                    //Test
+                    var obj = {
+                        id: element.id,
+                        idGrp : element.idGrp
+                    }
+                    listItens.push(obj);
+
                 });
             }
         });
-        console.log("List ID Selected: " + JSON.stringify(listItens));
-        return listItens;
+        
+         var obj = {};
+         obj["listIds"] =  listIds;
+         obj["listItens"] = listItens;
+        return obj;
     }
+   
+    
 
     setMapSelection(item){
         let id;
