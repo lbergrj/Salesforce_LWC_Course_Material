@@ -4,5 +4,6 @@
     "**/bower_components": true,
     "**/.sfdx": true
   },
-  "vlocity.sfdxUsername": "lindem@gmx.com"
+  "vlocity.sfdxUsername": "lindem@gmx.com",
+  "visualforce.format.indentInnerHtml": true
 }

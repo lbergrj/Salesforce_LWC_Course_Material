@@ -12,14 +12,14 @@ export default class ArrowFunction extends LightningElement {
         //result = [2, 4, 6, 8]
 
         let obj = {
-            firstName : "Antonio",
-            lastName : "Alves",
-            getName : function() {
-                console.log(obj.firstName);
-                const fullName = () => {
-                    console.log(obj.firstName);
-                    console.log("My full name is " + obj.firstName  + " " + obj.lastName);
-                }
+                    firstName : "Antonio",
+                    lastName : "Alves",
+                    getName : function() {
+                        console.log(obj.firstName);
+                        const fullName = () => {
+                        console.log(obj.firstName);
+                        console.log("My full name is " + obj.firstName  + " " + obj.lastName);
+                    }
                 fullName();
             }
         }
