@@ -27,11 +27,11 @@ export default class TestMapComponenet extends LightningElement {
         this.data = this.setMockData();
         this.completeMapGrp(this.data);
         this.dataSize = Object.keys(this.data).length;
-        this.tableLoadingState = false;
+         this.tableLoadingState = false;
+        
+         this.showMapData(this.mapGrp);
 
-        this.showMapData(this.mapGrp);
-        
-        
+
     }
 
     handleSelected(event){
@@ -43,8 +43,8 @@ export default class TestMapComponenet extends LightningElement {
     handlerClick(event){
         console.log("Click");
         this.resetList();
-      
-        
+
+
     }
 
     resetList(){
@@ -52,8 +52,8 @@ export default class TestMapComponenet extends LightningElement {
         this.preSelectedRows = [...array];
         this.selectedRows = [...array];
         console.log(" Lista Selecionada: " + JSON.stringify(this.selectedRows));
-
     } 
+
 
     itemChangedHandler(){
         var sizeMapNew = this.mapIdsSelectedNew.size;
@@ -82,22 +82,21 @@ export default class TestMapComponenet extends LightningElement {
 
        //Atualiza o mapa antigo para comparação para próvima seleção
        this.mapIdsSelectedOld = this.createMap(selectedLists.listItens);
-        
     }
 
-   
+
     compareMaps(map1, map2){
         const keys = Array.from(map1.values());
         var output = {};
         keys.forEach(item => {
             if(map2.get(item.id) == undefined || map2.get(item.id) == null ){
-                
                 output = item;
                 return;
             }
         });
         return output;
     }
+
 
     createMap(arrayInput){
         let map = new Map();
@@ -111,7 +110,6 @@ export default class TestMapComponenet extends LightningElement {
         return map;
     }
 
-    
 
     showMapData(map){
         console.log("Show Map Data: ");
@@ -121,6 +119,7 @@ export default class TestMapComponenet extends LightningElement {
         });
     }
 
+
     getSelectedListsFromMap(){
         var listIds = new Array();
         var listItens = new Array();
@@ -128,25 +127,21 @@ export default class TestMapComponenet extends LightningElement {
             if(item.isSelected == true){
                 item.data.forEach(element => {
                     listIds.push(element.id);
-                    
                     //Test
                     var obj = {
                         id: element.id,
                         idGrp : element.idGrp
                     }
                     listItens.push(obj);
-
                 });
             }
         });
-        
          var obj = {};
          obj["listIds"] =  listIds;
          obj["listItens"] = listItens;
         return obj;
     }
-   
-    
+
 
     setMapSelection(item){
         let id;
@@ -159,6 +154,7 @@ export default class TestMapComponenet extends LightningElement {
         this.mapGrp.get(id).isSelected = item.isSelected;
     }
 
+
     completeMapGrp(input){
         if(input != null && input != undefined){
             input.forEach(element => {
@@ -166,31 +162,31 @@ export default class TestMapComponenet extends LightningElement {
                 item["isSelected"] = false;
                 var array = new Array();
                 
-                //Adiciona no Map itens sem Grupo Controle
+                //Adiciona no Map itens sem Grupo Controle  key = id
                 if(element.idGrp == null ||element.idGrp == undefined){
-                    
                     array.push(element);
                     item['data'] = array;
                     this.mapGrp.set(element.id,item);
                 }
 
                 else{
+                    //Adiciona item no map com key = idGrp
                     var idGrControle = element.idGrp;
                     if(this.mapGrp.get(idGrControle) == undefined || this.mapGrp.get(idGrControle) == null){
-                        //console.log("Criar Grupos de Controle: " + idGrControle);
                         array.push(element);
                         item['data'] = array;
                         this.mapGrp.set(idGrControle,item);
                     }
                     else{
+                        //Adiciona elemento ao grupo já criado
                         item = this.mapGrp.get(idGrControle);
                         item.data.push(element);
-                       //console.log("Item Salvo no Mapa" + JSON.stringify(item));
                     }
                 }
             });
         }
     }
+
 
     setMockData(){
         return [
@@ -228,8 +224,24 @@ export default class TestMapComponenet extends LightningElement {
                 phone : "21999989090",
                 amount : 2600,
                 closeAt : "2021-08-05"
+            },
+            {
+                id :"005",
+                name : "Pablo Oliveira",
+                website : "http://www.hotmail.com",
+                phone : "21999989077",
+                amount : 2600,
+                closeAt : "2021-08-05"
+            },
+            {
+                id :"008",
+                idGrp : "B",
+                name : "Julia Mendes",
+                website : "http://www.gmail.com",
+                phone : "21999981456",
+                amount : 2800,
+                closeAt : "2021-12-05"
             }
-
         ]
     }
 
