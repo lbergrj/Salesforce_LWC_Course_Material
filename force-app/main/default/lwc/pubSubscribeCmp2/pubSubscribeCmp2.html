@@ -1,0 +1,13 @@
+<template>
+         
+    <lightning-card  title="Subscribe Component 02">
+        <p class="slds-p-around_medium" style="font-size:25px">
+            Received Text: {strCapturedText}
+        </p>
+        <div class="slds-m-around_medium">
+            <lightning-button class="slds-m-right_medium" variant="brand" label="Subscribe" onclick={conectListener} ></lightning-button>
+            <lightning-button variant="brand" label="Unsubscribe" onclick={disconnectedCallback} ></lightning-button>
+        </div>
+    </lightning-card>
+
+</template>

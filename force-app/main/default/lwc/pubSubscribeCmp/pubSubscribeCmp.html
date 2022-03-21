@@ -1,0 +1,17 @@
+<template>
+         
+    <lightning-card  title="Subscribe Component 01">
+        <div class="slds-p-around_medium" style="font-size:18px">
+            FirstName: {dataReceived.firstName}
+        </div>
+        <div class="slds-p-around_medium" style="font-size:18px">
+            Last Name: {dataReceived.lastName}
+        </div>
+
+        <div class="slds-m-around_medium">
+            <lightning-button class="slds-m-right_medium" variant="brand" label="Subscribe" onclick={conectListener} ></lightning-button>
+            <lightning-button variant="brand" label="Unsubscribe" onclick={disconnectedCallback} ></lightning-button>
+        </div>
+    </lightning-card>
+
+</template>

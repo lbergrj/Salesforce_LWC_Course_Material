@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title="Publish Component">
+        <lightning-input class="slds-p-around_medium"
+            label="Fisrt Name" 
+            value={dataCmp.firstName} 
+            onchange={changeFirstName}
+        ></lightning-input>
+
+        <lightning-input class="slds-p-around_medium"
+            label="Last Name" 
+            value={dataCmp.lastName} 
+            onchange={changeLastName}
+        ></lightning-input>
+        <br/>
+        <lightning-button class="slds-p-around_medium" label="Publish" variant="brand" 
+            onclick={publishEvent}></lightning-button>
+        
+    </lightning-card>
+</template>
