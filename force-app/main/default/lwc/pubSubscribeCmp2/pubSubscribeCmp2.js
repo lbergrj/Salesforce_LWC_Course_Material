@@ -1,11 +1,17 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { registerListener, unregisterListener,unregisterAllListeners } from 'c/pubsub2';
 
 
 export default class PubSubscribeCmp extends LightningElement {
     strCapturedText = '';
-    @wire(CurrentPageReference) pageRef;
+    @wire(CurrentPageReference) pageRef;     
+     dataReceived = {
+        firstName:"",
+        lastName:""
+    }
+
+
 
     // This method will run once the component is rendered on DOM and will add the listener.
     connectedCallback(){
@@ -25,7 +31,8 @@ export default class PubSubscribeCmp extends LightningElement {
 
     // This method will update the value once event is captured.
     setCaptureText(objPayload){
-        this.strCapturedText = objPayload.firstName;
+        //this.strCapturedText = objPayload.firstName;
+        this.dataReceived ={...objPayload}  ;
         console.log("Received: " + JSON.stringify( objPayload));
     }
 }
